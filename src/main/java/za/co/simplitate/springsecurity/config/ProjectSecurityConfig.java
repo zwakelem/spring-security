@@ -22,15 +22,18 @@ public class ProjectSecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 //        http.authorizeHttpRequests((reqs) -> reqs.anyRequest().permitAll());
 //        http.authorizeHttpRequests((reqs) -> reqs.anyRequest().denyAll());
-        http.requiresChannel(rcc -> rcc.anyRequest().requiresInsecure())
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests((reqs) -> reqs
-                .requestMatchers("/myAccount", "/myBalance", "/myLoans", "/myCards").authenticated()
-                .requestMatchers("/notices", "/contact", "/error", "/register").permitAll());
-        http.formLogin(withDefaults());
-        http.httpBasic(hbc -> hbc.authenticationEntryPoint(
-                new CustomBasicAuthenticationEntryPoint()));
-        http.exceptionHandling(ehc -> ehc.accessDeniedHandler(
+        http.sessionManagement(smc -> smc.invalidSessionUrl("/invalidSession")
+                .maximumSessions(3)
+                .maxSessionsPreventsLogin(true))
+            .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure())
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests((reqs) -> reqs
+            .requestMatchers("/myAccount", "/myBalance", "/myLoans", "/myCards").authenticated()
+            .requestMatchers("/notices", "/contact", "/error", "/register", "/invalidSession").permitAll())
+            .formLogin(withDefaults())
+            .httpBasic(hbc -> hbc.authenticationEntryPoint(
+                new CustomBasicAuthenticationEntryPoint()))
+            .exceptionHandling(ehc -> ehc.accessDeniedHandler(
                 new CustomAccessDeniedHandler()));
         return http.build();
     }
