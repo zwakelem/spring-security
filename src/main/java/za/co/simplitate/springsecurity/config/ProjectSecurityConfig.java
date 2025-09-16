@@ -9,6 +9,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.password.HaveIBeenPwnedRestApiPasswordChecker;
+import za.co.simplitate.springsecurity.exceptions.CustomAccessDeniedHandler;
 import za.co.simplitate.springsecurity.exceptions.CustomBasicAuthenticationEntryPoint;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -29,8 +30,8 @@ public class ProjectSecurityConfig {
         http.formLogin(withDefaults());
         http.httpBasic(hbc -> hbc.authenticationEntryPoint(
                 new CustomBasicAuthenticationEntryPoint()));
-        http.exceptionHandling(ehc -> ehc.authenticationEntryPoint(
-                new CustomBasicAuthenticationEntryPoint()));
+        http.exceptionHandling(ehc -> ehc.accessDeniedHandler(
+                new CustomAccessDeniedHandler()));
         return http.build();
     }
 
