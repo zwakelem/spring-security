@@ -14,14 +14,12 @@ import za.co.simplitate.springsecurity.exceptions.CustomBasicAuthenticationEntry
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-@Profile("!prod")
-public class ProjectSecurityConfig {
+@Profile("prod")
+public class ProjectSecurityProdConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-//        http.authorizeHttpRequests((reqs) -> reqs.anyRequest().permitAll());
-//        http.authorizeHttpRequests((reqs) -> reqs.anyRequest().denyAll());
-        http.requiresChannel(rcc -> rcc.anyRequest().requiresInsecure())
+        http.requiresChannel(rcc -> rcc.anyRequest().requiresSecure()) // only https traffic
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((reqs) -> reqs
                 .requestMatchers("/myAccount", "/myBalance", "/myLoans", "/myCards").authenticated()
