@@ -25,7 +25,10 @@ public class ProjectSecurityProdConfig {
                 .requestMatchers("/myAccount", "/myBalance", "/myLoans", "/myCards").authenticated()
                 .requestMatchers("/notices", "/contact", "/error", "/register").permitAll());
         http.formLogin(withDefaults());
-        http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
+        http.httpBasic(hbc -> hbc.authenticationEntryPoint(
+                new CustomBasicAuthenticationEntryPoint()));
+        http.exceptionHandling(ehc -> ehc.authenticationEntryPoint(
+                new CustomBasicAuthenticationEntryPoint()));
         return http.build();
     }
 
