@@ -22,7 +22,8 @@ public class ProjectSecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 //        http.authorizeHttpRequests((reqs) -> reqs.anyRequest().permitAll());
 //        http.authorizeHttpRequests((reqs) -> reqs.anyRequest().denyAll());
-        http.sessionManagement(smc -> smc.invalidSessionUrl("/invalidSession")
+        http.sessionManagement(smc -> smc
+                .invalidSessionUrl("/invalidSession")
                 .maximumSessions(3)
                 .maxSessionsPreventsLogin(true))
             .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure())

@@ -15,7 +15,7 @@ public class CustomBasicAuthenticationEntryPoint implements AuthenticationEntryP
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
-        response.setHeader("eazybank-error-reason", "authentication failed");
+        response.setHeader("eazybank-error-reason", "Unauthorised");
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType("application/json; charset=UTF-8");
         response.getWriter().write(createJsonResponse(request, authException));
