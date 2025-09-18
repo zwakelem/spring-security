@@ -19,8 +19,13 @@ public class ContactController {
     private final ContactRepository contactRepository;
 
     @PostMapping("/contact")
-    public ContactTO saveContactInquiryDetails(@RequestBody Contact contact) {
+    public ContactTO saveContactInquiryDetails(@RequestBody ContactTO contactTO) {
+        Contact contact = new Contact();
         contact.setContactId(getServiceReqNumber());
+        contact.setContactName(contactTO.contactName());
+        contact.setContactEmail(contactTO.contactEmail());
+        contact.setSubject(contactTO.subject());
+        contact.setMessage(contactTO.message());
         contact.setCreateDt(new Date(System.currentTimeMillis()));
         return GenericMapper.toContactTO(contactRepository.save(contact));
     }
