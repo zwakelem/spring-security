@@ -1,8 +1,12 @@
 package za.co.simplitate.springsecurity.dto;
 
+import java.util.Date;
+
 public record CustomerTO(
         long id,
+        String name,
         String email,
-        String pwd,
-        String role
+        String mobileNumber,
+        String role,
+        Date createDt
 ) {}

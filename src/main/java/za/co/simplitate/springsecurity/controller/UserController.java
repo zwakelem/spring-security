@@ -20,7 +20,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(CustomerTO customerTo) {
         try {
-            String hashPassword = passwordEncoder.encode(customerTo.pwd());
+//            String hashPassword = passwordEncoder.encode(customerTo.pwd());
             Customer customer = new Customer();
             Customer savedCustomer = customerRepository.save(customer);
             if(savedCustomer.getId() > 0) {
