@@ -7,6 +7,7 @@ public record CustomerTO(
         String name,
         String email,
         String mobileNumber,
+        String pwd,
         String role,
         Date createDt
 ) {}
