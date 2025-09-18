@@ -21,7 +21,7 @@ public class UserController {
     public ResponseEntity<String> registerUser(CustomerTO customerTo) {
         try {
             String hashPassword = passwordEncoder.encode(customerTo.pwd());
-            Customer customer = new Customer(0l, customerTo.email(), hashPassword, customerTo.role());
+            Customer customer = new Customer();
             Customer savedCustomer = customerRepository.save(customer);
             if(savedCustomer.getId() > 0) {
                 return ResponseEntity.status(HttpStatus.CREATED)
