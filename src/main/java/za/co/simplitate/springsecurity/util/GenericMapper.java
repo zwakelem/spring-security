@@ -13,7 +13,7 @@ public class GenericMapper {
             return null;
         }
         return new CustomerTO(customer.getId(), customer.getName(), customer.getEmail(),
-                customer.getMobileNumber(), customer.getPwd(), customer.getRole(),
+                customer.getMobileNumber(), "**********", customer.getRole(),
                 toUtilDate(customer.getCreateDt()));
     }
 
@@ -27,6 +27,7 @@ public class GenericMapper {
         customer.setEmail(customerTO.email());
         customer.setMobileNumber(customerTO.mobileNumber());
         customer.setRole(customerTO.role());
+        customer.setPwd(customerTO.pwd());
         customer.setCreateDt(toSqlDate(customerTO.createDt()));
         return customer;
     }

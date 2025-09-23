@@ -1,4 +1,4 @@
-package za.co.simplitate.springsecurity.config;
+package za.co.simplitate.springsecurity.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
