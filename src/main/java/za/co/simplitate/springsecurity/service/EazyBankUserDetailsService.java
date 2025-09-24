@@ -12,6 +12,7 @@ import za.co.simplitate.springsecurity.entities.Customer;
 import za.co.simplitate.springsecurity.repositories.CustomerRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -23,7 +24,9 @@ public class EazyBankUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Customer customer = customerRepository.findByEmail(username).orElseThrow(() ->
                 new UsernameNotFoundException("User details not found for user: " + username));
-        List<GrantedAuthority> grantedAuthorities = List.of(new SimpleGrantedAuthority(customer.getRole()));
+        List<GrantedAuthority> grantedAuthorities = customer.getAuthorities().stream()
+                                        .map(auth -> new SimpleGrantedAuthority(auth.getName()))
+                                        .collect(Collectors.toList());
         return new User(customer.getEmail(), customer.getPwd(), grantedAuthorities);
     }
 }
