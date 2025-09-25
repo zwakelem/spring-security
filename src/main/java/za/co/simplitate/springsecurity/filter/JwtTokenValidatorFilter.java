@@ -56,7 +56,7 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
     // when the endpoint is /user framework should NOT invoke this filter
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return request.getServletPath().equals("/user");
+        return request.getServletPath().equals("/user") || request.getServletPath().equals("/apiLogin");
     }
 
 }
