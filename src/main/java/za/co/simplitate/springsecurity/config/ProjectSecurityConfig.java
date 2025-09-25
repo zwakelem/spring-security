@@ -18,7 +18,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import za.co.simplitate.springsecurity.exceptions.CustomAccessDeniedHandler;
 import za.co.simplitate.springsecurity.exceptions.CustomBasicAuthenticationEntryPoint;
+import za.co.simplitate.springsecurity.filter.AuthoritiesLoggingAfterFilter;
 import za.co.simplitate.springsecurity.filter.CsrfCookieFilter;
+import za.co.simplitate.springsecurity.filter.RequestValidationBeforeFilter;
 
 import java.util.Collections;
 
@@ -49,6 +51,8 @@ public class ProjectSecurityConfig {
                         .ignoringRequestMatchers( "/contact","/register")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
                 .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure()) // Only HTTP
                 .authorizeHttpRequests((requests) -> requests
                     /*.requestMatchers("/myAccount").hasAuthority("VIEWACCOUNT")
