@@ -18,10 +18,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import za.co.simplitate.springsecurity.exceptions.CustomAccessDeniedHandler;
 import za.co.simplitate.springsecurity.exceptions.CustomBasicAuthenticationEntryPoint;
-import za.co.simplitate.springsecurity.filter.AuthoritiesLoggingAfterFilter;
-import za.co.simplitate.springsecurity.filter.CsrfCookieFilter;
-import za.co.simplitate.springsecurity.filter.RequestValidationBeforeFilter;
+import za.co.simplitate.springsecurity.filter.*;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -33,8 +32,8 @@ public class ProjectSecurityProdConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         CsrfTokenRequestAttributeHandler csrfTokenRequestAttributeHandler = new CsrfTokenRequestAttributeHandler();
-        http.securityContext(contextConfig -> contextConfig.requireExplicitSave(false))
-                .sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+        http.sessionManagement(sessionConfig ->
+                        sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(corsConfig -> corsConfig.configurationSource(new CorsConfigurationSource() {
                     @Override
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
@@ -43,6 +42,7 @@ public class ProjectSecurityProdConfig {
                         config.setAllowedMethods(Collections.singletonList("*"));
                         config.setAllowCredentials(true);
                         config.setAllowedHeaders(Collections.singletonList("*"));
+                        config.setExposedHeaders(Arrays.asList("Authorization"));
                         config.setMaxAge(3600L);
                         return config;
                     }
@@ -52,7 +52,9 @@ public class ProjectSecurityProdConfig {
                     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
                 .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new JwtTokenValidatorFilter(), BasicAuthenticationFilter.class)
                 .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new JwtTokenGeneratorFilter(), BasicAuthenticationFilter.class)
                 .requiresChannel(rcc -> rcc.anyRequest().requiresSecure()) // Only HTTPS
                 .authorizeHttpRequests((requests) -> requests
                     .requestMatchers("/myAccount").hasRole("USER")
