@@ -27,7 +27,7 @@ public class CardsController {
 
         if(customerOptional.isPresent()) {
             List<Cards> cards = cardsRepository.findByCustomerId(customerOptional.get().getId());
-            return cards.stream().map(GenericMapper::toCardsTO).toList();
+            return cards != null ? cards.stream().map(GenericMapper::toCardsTO).toList() : null;
         } else {
             return null;
         }

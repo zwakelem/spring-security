@@ -28,7 +28,9 @@ public class BalanceController {
         if(customerOptional.isPresent()) {
             List<AccountTransactions> accountTransactions = accountTransactionsRepository.
                     findByCustomerIdOrderByTransactionDtDesc(customerOptional.get().getId());
-            return accountTransactions.stream().map(GenericMapper::toAccountTransactionsTO).toList();
+            return accountTransactions != null ? accountTransactions.stream()
+                    .map(GenericMapper::toAccountTransactionsTO)
+                    .toList() : null;
         } else {
             return null;
         }

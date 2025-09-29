@@ -27,7 +27,7 @@ public class LoansController {
 
         if(customerOptional.isPresent()) {
             List<Loans> loans = loanRepository.findByCustomerIdOrderByStartDtDesc(customerOptional.get().getId());
-            return loans.stream().map(GenericMapper::toLoansTO).toList();
+            return loans != null ? loans.stream().map(GenericMapper::toLoansTO).toList() : null;
         } else {
             return null;
         }
